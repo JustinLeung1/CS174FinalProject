@@ -10,14 +10,26 @@
     <h1><%= title %></h1>
     <table border="1">
       <tr>
-         <th>Task Name</th><th>Status</th><th>Change</th>
+         <th>Task Name</th><th>Status</th><th>Change</th><th>Submit</th>
       </tr>
       <% dict = {0:"No Progress", 1:"In Progress", 2:"Completed"}%>
       <% for (var i = 0; i < data.length; i++) { %>
        <tr>
          <td><%= data[i].task %></td>
          <td><%= dict[data[i].status] %></td>
-
+         <form action="/update/<%=data[i].taskID%>" method="post">
+          <td> 
+              <select name="newStatus" id="newStatus">
+                <option value="">--Please choose an option--</option>
+                <option value="0">No Progress</option>
+                <option value="1">In Progress</option>
+                <option value="2">Completed</option>
+              </select>
+            </td>
+            <td>
+              <button name="foo" value="submit">Submit</button>
+            </td>
+          </form>
        </tr>    
       <% } %>
    </table>

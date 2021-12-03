@@ -7,23 +7,51 @@ router.get('/', function(req, res, next) {
     res.redirect('login')
   }
   else{
-    sql = "SELECT * FROM tasks"; // todo add a where 
-    var query = db.query(sql, function(err, result){
-      res.render('index', { title: req.session.email, data: result, message:"" });
-    })
+
+    sql = "SELECT userID from users WHERE email = '"  + req.session.email + "'";
+    var query1= db.query(sql, function(err, result){
+      userId = result[0]["userID"];
+      console.log(userId);
+      sql = "SELECT * FROM tasks WHERE userID = " + userId;
+      var query = db.query(sql, function(err, result){
+        if (result)
+          res.render('index', { title: req.session.email, data: result, message:"" });
+      })
+    });
     //res.render('index', { title: req.session.email });
   }
 });
+
+router.post('/update/:taskID', function(req, res){
+  const taskID = req.params.taskID 
+  const status = req.body.newStatus 
+  sql = "UPDATE tasks SET status = " + status + " WHERE taskID = " + taskID;
+  var query = db.query(sql, function(err, result){
+    if (result)
+      res.redirect('/');
+  })
+})
 
 router.post('/add', function(req, res, next) {
   post = req.body;
   newTask = post.newTask;
   if (!newTask){
+    sql = "SELECT userID from users WHERE email = '"  + req.session.email + "'";
+    var query1= db.query(sql, function(err, result){
+      userId = result[0]["userID"];
+      sql = "SELECT * FROM tasks WHERE userID = " + userId; // add a where the req.email id here todo
+      var query = db.query(sql, function(err, result){
+        if (result)
+          res.render('index', { title: req.session.email, data: result, message:"New Task cannot be empty! " });
+      })
+    });
+    /*
     sql = "SELECT * FROM tasks"; // add a where the req.email id here todo
     var query = db.query(sql, function(err, result){
       console.log(result)
       res.render('index', { title: req.session.email, data: result, message:"New Task cannot be empty! " });
     })
+    */
   }else{
     sql = "SELECT userID from users WHERE email = '"  + req.session.email + "'";
     var query1= db.query(sql, function(err, result){
