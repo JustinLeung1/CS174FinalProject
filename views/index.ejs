@@ -3,6 +3,8 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+ 
   </head>
   <body>
     <h1><%= title %></h1>
@@ -19,8 +21,16 @@
        </tr>    
       <% } %>
    </table>
-
-
+   <br><br><br><br><br><br>
+   <% if (message.length > 0) { %>
+    <div class="alert alert-danger col-sm-12"><%= message %></div>
+    <% } %>
+   <form action="/add" method="post">
+    <label for="newTask">New Task:</label><br>
+    <input type="text" id="newTask" name="newTask" value=""><br>
+    <button name="foo" value="upvote">Add</button>
+  </form> 
+  <br><br><br><br><br><br>
     <form action="/logout" method="post">
       <button name="foo" value="upvote">Logout</button>
     </form>

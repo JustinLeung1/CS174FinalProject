@@ -9,7 +9,7 @@ var usersRouter = require('./routes/users');
 var app = express();
 
 var config = require('./services/config');
-var connection = mysql.createConnection(config.db);
+var connection = mysql.createPool(config.db);
 var session = require('express-session');
 
 global.db = connection;

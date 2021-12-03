@@ -7,20 +7,51 @@ router.get('/', function(req, res, next) {
     res.redirect('login')
   }
   else{
-    sql = "SELECT * FROM tasks";
+    sql = "SELECT * FROM tasks"; // todo add a where 
     var query = db.query(sql, function(err, result){
-      console.log(result)
-      res.render('index', { title: req.session.email, data: result });
+      res.render('index', { title: req.session.email, data: result, message:"" });
     })
     //res.render('index', { title: req.session.email });
   }
+});
+
+router.post('/add', function(req, res, next) {
+  post = req.body;
+  newTask = post.newTask;
+  if (!newTask){
+    sql = "SELECT * FROM tasks"; // add a where the req.email id here todo
+    var query = db.query(sql, function(err, result){
+      console.log(result)
+      res.render('index', { title: req.session.email, data: result, message:"New Task cannot be empty! " });
+    })
+  }else{
+    sql = "SELECT userID from users WHERE email = '"  + req.session.email + "'";
+    var query1= db.query(sql, function(err, result){
+      userId = result[0]["userID"];
+      console.log(userId);
+      sql = "INSERT INTO tasks(userID, task, status) VALUES (" + userId + ", '" +  newTask + "', 0)";
+      var query = db.query(sql, function(err, result){
+        console.log(sql)
+        console.log(result);
+        res.redirect('/')
+      })
+    });
+    // sql = "INSERT INTO task(userID, task, status) VALUES ('" + ;
+    // var query = db.query(sql, function(err, result){
+    //   console.log(result)
+    //   res.redirect('/')
+    // })
+  }
+  //res.redirect('/')
 });
 
 router.get('/login', function(req, res){
   if (req.session.email){
     res.redirect('/')
   }
-  res.render('login', {'message': ''})
+  else{
+    res.render('login', {'message': ''})
+  }
 })
 
 router.get('/signup', function(req, res){
