@@ -7,7 +7,12 @@ router.get('/', function(req, res, next) {
     res.redirect('login')
   }
   else{
-    res.render('index', { title: req.session.email });
+    sql = "SELECT * FROM tasks";
+    var query = db.query(sql, function(err, result){
+      console.log(result)
+      res.render('index', { title: req.session.email, data: result });
+    })
+    //res.render('index', { title: req.session.email });
   }
 });
 
@@ -76,9 +81,12 @@ router.post('/signup', function(req, res){
         })
       });
     });
-    
+})
 
-    
+router.post('/logout', function(req, res){
+  req.session.destroy(function(err){
+    res.redirect('login')
+  })
 })
 
 module.exports = router;

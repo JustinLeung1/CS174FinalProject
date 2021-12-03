@@ -6,6 +6,23 @@
   </head>
   <body>
     <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <table border="1">
+      <tr>
+         <th>Task Name</th><th>Status</th><th>Change</th>
+      </tr>
+      <% dict = {0:"No Progress", 1:"In Progress", 2:"Completed"}%>
+      <% for (var i = 0; i < data.length; i++) { %>
+       <tr>
+         <td><%= data[i].task %></td>
+         <td><%= dict[data[i].status] %></td>
+
+       </tr>    
+      <% } %>
+   </table>
+
+
+    <form action="/logout" method="post">
+      <button name="foo" value="upvote">Logout</button>
+    </form>
   </body>
 </html>
